@@ -1,13 +1,14 @@
 // --------------------------------------
 // Scan and Identify I2C devices by farmerkeith
-// modified 01 December 2019
+// modified 21 February 2021
 // Based on i2c_scanner Version 6
 //
 // This sketch tests all standard 7-bit addresses
 // Devices with higher bit address might not be seen properly.
 //
 // Recognized devices are listed as their device type
-// Could be greatly enhanced using https://learn.adafruit.com/i2c-addresses/the-list
+// greatly enhanced using https://learn.adafruit.com/i2c-addresses/the-list
+// although most of the devices from Adafruit's list are untested / unverified
 
 #include <Wire.h>
 
@@ -29,7 +30,7 @@ void setup() {
   } else { // bus clear
     // now we can start Arduino Wire as a master
   }
-  Serial.println();  // clear any junk from boot
+  Serial.println();  // clear the boot message
   Serial.print(F("\nI2C Scan_ID"));
   Serial.println(F("\nScans for I2C devices and names any that it knows about"));
   Wire.begin();
@@ -71,43 +72,130 @@ void loop() {
     if (error == 0) {
       byte data1 = 0;
       switch (address) {
+        case 0x0E:
+          Serial.println(F(" MAG3110 3-Axis Magnetometer"));
+          break;
+        case 0x10:
+          Serial.println(F(" VEML6075 UV sensor or VEML7700 Ambient Light sensor"));
+          break;
+        case 0x11:
+          Serial.println(F(" Si4713 FM Transmitter with RDS"));
+          break;
+        case 0x13:
+          Serial.println(F(" VCNL40x0 proximity sensor"));
+          break;
+        case 0x18:
+          Serial.println(F(" MCP9808 temp sensor"));
+          Serial.println(F(" or LIS3DH 3-axis accelerometer"));
+          break;
+        case 0x19:
+          Serial.println(F(" MCP9808 temp sensor"));
+          Serial.println(F(" or LIS3DH 3-axis accelerometer"));
+          Serial.println(F(" or LSM303 Accelerometer"));
+          break;
+        case 0x1A: case 0x1B:
+          Serial.println(F(" MCP9808 temp sensor"));
+          break;
+        case 0x1C:
+          Serial.println(F(" LIS3MDL Magetometer"));
+          Serial.println(F(" or MCP9808 temp sensor"));
+          Serial.println(F(" or MMA845x 3-axis Accelerometer"));
+          Serial.println(F(" or FXOS8700 Accelerometer/Magnetometer"));
+          Serial.println(F(" or MMA7455L Accelerometer"));
+          break;
         case 0x1D:
-          Serial.println(F(" ADXL345 digital accelerometer"));
+          Serial.println(F(" ADXL345 Accelerometer"));
+          Serial.println(F(" or MCP9808 temp sensor"));
+          Serial.println(F(" or MMA845x 3-axis Accelerometer"));
+          Serial.println(F(" or FXOS8700 Accelerometer/Magnetometer"));
+          Serial.println(F(" or LSM9DS0 9-axis IMU"));
+          Serial.println(F(" or MMA7455L Accelerometer"));
           break;
         case 0x1E:
           Serial.println(F(" HMC5883L 3-axis digital compass"));
+          Serial.println(F(" or FXOS8700 Accelerometer/Magnetometer"));
+          Serial.println(F(" or LIS2MDL Magnetometer"));
+          Serial.println(F(" or LIS3MDL Magnetometer"));
+          Serial.println(F(" or LSM303 Magnetometer"));
+          Serial.println(F(" or LSM9DS0 9-axis IMU"));
+          Serial.println(F(" or MCP9808 temp sensor"));
           break;
-        case 0x20: case 0x21:
-          Serial.println(F(" PCF8574 or MCP23017 I/O expander"));
+        case 0x1F:
+          Serial.println(F(" FXOS8700 Accelerometer/Magnetometer"));
+          Serial.println(F(" or MCP9808 temp sensor"));
+          break;
+        case 0x20:
+          Serial.println(F(" PCF8574, MCP23008, MCP23017, PCAL6408A or PCAL6416A I/O expander"));
+          Serial.println(F(" or FXAS21002 gyro"));
+          Serial.println(F(" or Chirp! Water sensor"));
+          break;
+        case 0x21:
+          Serial.println(F(" PCF8574, MCP23008, MCP23017, PCAL6408A or PCAL6416A I/O expander"));
           Serial.println(F(" or FXAS21002 gyro"));
           break;
-        case 0x22: case 0x23: case 0x24: case 0x25: case 0x26:
-          Serial.println(F(" PCF8574 or MCP23017 I/O expander"));
+        case 0x22: case 0x23: case 0x24: case 0x25:
+          Serial.println(F(" PCF8574, MCP23008 or MCP23017 I/O expander"));
+          break;
+        case 0x26:
+          Serial.println(F(" PCF8574, MCP23008 or MCP23017 I/O expander"));
+          Serial.println(F(" or MSA301 Triple Axis Accelerometer"));
           break;
         case 0x27:
-          Serial.println(F(" PCF8574 or MCP23017 I/O expander"));
+          Serial.println(F(" PCF8574, MCP23008 or MCP23017 I/O expander"));
           Serial.println(F(" or LCD with I2C backpack"));
           break;
         case 0x28:
-          Serial.println(F(" BNO055 9-DOF Absolute Orientation sensor"));
+          Serial.println(F(" BNO055 9-DOF IMU"));
+          Serial.println(F(" or CAP1188 8-channel Capacitive Touch"));
+          Serial.println(F(" or DS1841 I2C Digital Logarithmic Potentiometer"));
+          Serial.println(F(" or DS3502 I2C Digital 10K Potentiometer"));
+          Serial.println(F(" or PCT2075 Temperature Sensor"));
+          Serial.println(F(" or TSL2591 light sensor"));
           break;
         case 0x29:
           Serial.println(F(" TSC3472 color sensor"));
           Serial.println(F(" or BNO055 9-DOF Absolute Orientation sensor"));
+          Serial.println(F(" or DS1841 I2C Digital Logarithmic Potentiometer"));
+          Serial.println(F(" or DS3502 I2C Digital 10K Potentiometer"));
+          Serial.println(F(" or PCT2075 Temperature Sensor"));
+          Serial.println(F(" or TSL2561/TLS2591 light sensor"));
+          Serial.println(F(" or VL53L0x/VL6180X ToF distance"));
+          Serial.println(F(" or CAP1188 8-channel Capacitive Touch"));
+          break;
+        case 0x2A: case 0x2B:
+          Serial.println(F(" CAP1188 8-channel Capacitive Touch"));
+          Serial.println(F(" or DS1841 I2C Digital Logarithmic Potentiometer"));
+          Serial.println(F(" or DS3502 I2C Digital 10K Potentiometer"));
+          Serial.println(F(" or PCT2075 Temperature Sensor"));
+          break;
+        case 0x2C: case 0x2D:
+          Serial.println(F(" CAP1188 8-channel Capacitive Touch"));
+          Serial.println(F(" or PCT2075 Temperature Sensor"));
+          break;
+        case 0x2E:
+          Serial.println(F(" PCT2075 Temperature Sensor"));
+          break;
+        case 0x33:
+          Serial.println(F(" MLX90640 IR Thermal Camera"));
           break;
         case 0x38:
           Serial.println(F(" PCF8574A I/O expander"));
+          Serial.println(F(" or VEML6070 UV Index"));
+          Serial.println(F(" or FT6x06 Capacitive Touch Driver"));
           break;
         case 0x39:
           Serial.println(F(" PCF8574A I/O expander"));
           Serial.println(F(" or TSC3472 color sensor"));
+          Serial.println(F(" or TSL2561 light sensor"));
+          Serial.println(F(" or VEML6070 UV Index"));
+          Serial.println(F(" or APDS-9960 IR/Color/Proximity Sensor"));
           break;
         case 0x3A: case 0x3B:
           Serial.println(F(" PCF8574A I/O expander"));
           break;
         case 0x3C: case 0x3D:
           Serial.println(F(" PCF8574A I/O expander"));
-          Serial.println(F(" or OLED with SSD1306 controller"));
+          Serial.println(F(" or OLED with SSD1305/SSD1306 controller"));
           break;
         case 0x3E:
           Serial.println(F(" PCF8574A I/O expander"));
@@ -117,36 +205,89 @@ void loop() {
           Serial.println(F(" or LCD with I2C backpack"));
           break;
         case 0x40:
-          Serial.println(F(" HTU21D digital humidity & temperature sensor or INA219 current monitor"));
+          Serial.println(F(" HTU21D Humidity/Temp Sensor"));
+          Serial.println(F(" or Si7021 Humidity/Temp sensor"));
+          Serial.println(F(" or HDC1008 Humidity/Temp sensor"));
+          Serial.println(F(" or TMP006/TMP007 IR Temperature sensor"));
+          Serial.println(F(" or PCA9685 16-channel PWM"));
+          Serial.println(F(" or INA219 High-Side DC Current/Voltage sensor"));
+          Serial.println(F(" or INA260 Precision DC Current/Power Sensor"));
           break;
-        case 0x41: case 0x42: case 0x43:
-          Serial.println(F(" INA219 current monitor"));
+        case 0x41:
+          Serial.println(F(" INA219 High-Side DC Current/Voltage sensor"));
+          Serial.println(F(" or INA260 Precision DC Current/Power Sensor"));
+          Serial.println(F(" or HDC1008 Humidity/Temp sensor"));
+          Serial.println(F(" or TMP006/TMP007 IR Temperature sensor"));
+          Serial.println(F(" or STMPE610/STMPE811 Resistive Touch controller"));
           break;
-        case 0x44: case 0x45:
-          Serial.println(F(" INA219 current monitor"));
+        case 0x42: case 0x43:
+          Serial.println(F(" INA219 High-Side DC Current/Voltage sensor"));
+          Serial.println(F(" or INA260 Precision DC Current/Power Sensor"));
+          Serial.println(F(" or HDC1008 Humidity/Temp sensor"));
+          Serial.println(F(" or TMP006/TMP007 IR Temperature sensor"));
+          break;
+        case 0x44:
+          Serial.println(F(" INA219 High-Side DC Current/Voltage sensor"));
+          Serial.println(F(" or INA260 Precision DC Current/Power Sensor"));
           Serial.println(F(" or SHT3x-DIS temperature & humidity sensor"));
+          Serial.println(F(" or TMP006/TMP007 IR Temperature sensor"));
+          Serial.println(F(" or ISL29125 Color Sensor"));
+          Serial.println(F(" or STMPE610/STMPE811 Resistive Touch controller"));
+          break;
+        case 0x45:
+          Serial.println(F(" INA219 High-Side DC Current/Voltage sensor"));
+          Serial.println(F(" or INA260 Precision DC Current/Power Sensor"));
+          Serial.println(F(" or SHT3x-DIS temperature & humidity sensor"));
+          Serial.println(F(" or TMP006/TMP007 IR Temperature sensor"));
           break;
         case 0x46: case 0x47:
-          Serial.println(F(" INA219 current monitor"));
+          Serial.println(F(" INA219 High-Side DC Current/Voltage sensor"));
+          Serial.println(F(" or INA260 Precision DC Current/Power Sensor"));
+          Serial.println(F(" or TMP006/TMP007 IR Temperature sensor"));
           break;
         case 0x48:
-          Serial.println(F(" ADS1113, ADS1114, ADS1115, ADS1013, ADS1014, ADS1015"));
-          Serial.println(F(" or INA219 current monitor"));
-          Serial.println(F(" or PN532 NFC/RFID controller "));
+          Serial.println(F(" ADS1x13, ADS1x14, ADS1x15 A/D converter"));
+          Serial.println(F(" or INA219 High-Side DC Current/Voltage sensor"));
+          Serial.println(F(" or INA260 Precision DC Current/Power Sensor"));
+          Serial.println(F(" or PN532 NFC/RFID controller"));
+          Serial.println(F(" or PCT2075 Temperature Sensor"));
+          Serial.println(F(" or TMP102 Temperature sensor"));
           break;
         case 0x49: case 0x4A: case 0x4B:
-          Serial.println(F(" ADS1113, ADS1114, ADS1115, ADS1013, ADS1014, ADS1015"));
-          Serial.println(F(" or INA219 current monitor"));
+          Serial.println(F(" ADS1x13, ADS1x14, ADS1x15 A/D converter"));
+          Serial.println(F(" or INA219 High-Side DC Current/Voltage sensor"));
+          Serial.println(F(" or INA260 Precision DC Current/Power Sensor"));
+          Serial.println(F(" or PCT2075 Temperature Sensor"));
+          Serial.println(F(" or TSL2561 light sensor"));
+          Serial.println(F(" or TMP102 Temperature sensor"));
           break;
         case 0x4C: case 0x4D: case 0x4E: case 0x4F:
-          Serial.println(F(" INA219 current monitor"));
+          Serial.println(F(" INA219 High-Side DC Current/Voltage sensor"));
+          Serial.println(F(" or INA260 Precision DC Current/Power Sensor"));
+          Serial.println(F(" or PCT2075 Temperature Sensor"));
           break;
-        case 0x50: case 0x51: case 0x52: case 0x54: case 0x55: case 0x56: case 0x57:
+        case 0x50: case 0x51: case 0x54: case 0x55: case 0x56:
           Serial.println(F(" AT24C32/64 EEPROM family"));
+          Serial.println(F(" or MB85RC FRAM"));
+          break;
+        case 0x52:
+          Serial.println(F(" AT24C32/64 EEPROM family"));
+          Serial.println(F(" or MB85RC FRAM"));
+          Serial.println(F(" or Nintendo Nunchuck controller"));
           break;
         case 0x53:
-          Serial.println(F(" ADXL345 digital accelerometer"));
-          Serial.println(F(" or AT24C32/64 EEPROM family"));
+          Serial.println(F(" AT24C32/64 EEPROM family"));
+          Serial.println(F(" or MB85RC FRAM"));
+          Serial.println(F(" or ADXL345 digital accelerometer"));
+          break;
+        case 0x57:
+          Serial.println(F(" AT24C32/64 EEPROM family"));
+          Serial.println(F(" or MB85RC FRAM"));
+          Serial.println(F(" or MAX3010x Pulse & Oximetry sensor"));
+          break;
+        case 0x58:
+          Serial.println(F(" TPA2016 I2C-controlled Amplifier"));
+          Serial.println(F(" or SGP30 Gas Sensor"));
           break;
         case 0x5A: case 0x5B:
           Wire.beginTransmission(address);
@@ -166,20 +307,91 @@ void loop() {
             Serial.print(data1, HEX);
             Serial.println(F(" AMS CCS811 eCO2 TVOC sensor"));
           }
-          else Serial.println(F("Unknown device"));
+          else
+          {
+            Serial.println(F(" MPR121 12-point capacitive touch sensor"));
+            if (address == 0x5a) Serial.println(F(" or MLX9061x IR temperature sensor"));
+          }
           break;
         case 0x5C:
           Serial.println(F(" AM2315 temperature & humidity sensor"));
+          Serial.println(F(" or AM2320 Humidity/Temp sensor"));
+          Serial.println(F(" or LPS25 Pressure Sensor"));
+          Serial.println(F(" or LPS33HW Ported Pressure Sensor"));
+          Serial.println(F(" or LPS35HW Pressure Sensor"));
+          Serial.println(F(" or MPR121 12-point capacitive touch sensor"));
+          break;
+        case 0x5D:
+          Serial.println(F(" LPS25 Pressure Sensor"));
+          Serial.println(F(" or LPS33HW Ported Pressure Sensor"));
+          Serial.println(F(" or LPS35HW Pressure Sensor"));
+          Serial.println(F(" or MPR121 12-point capacitive touch sensor"));
+          break;
+        case 0x5E:
+          Serial.println(F(" TLV493D triple-axis Magnetometer"));
+          break;
+        case 0x60:
+          Serial.println(F(" MCP4728 Quad DAC"));
+          Serial.println(F(" or MPL115A2 Barometric Pressure"));
+          Serial.println(F(" or MPL3115A2 Barometric Pressure"));
+          Serial.println(F(" or Si5351A Clock Generator"));
+          Serial.println(F(" or Si1145 Light/IR Sensor"));
+          Serial.println(F(" or MCP4725A0 12-bit DAC"));
+          Serial.println(F(" or TEA5767 Radio receiver"));
+          Serial.println(F(" or VCNL4040 Proximity and Ambient Light sensor"));
+          break;
+        case 0x61:
+          Serial.println(F(" Si5351A Clock Generator"));
+          Serial.println(F(" or MCP4725A0 12-bit DAC"));
+          break;
+        case 0x62:
+          Serial.println(F(" MCP4725A1 12-bit DAC"));
+          break;
+        case 0x63:
+          Serial.println(F(" Si4713 FM Transmitter with RDS"));
+          Serial.println(F(" or MCP4725A1 12-bit DAC"));
+          break;
+        case 0x64: case 0x65:
+          Serial.println(F(" MCP4725A2 12-bit DAC"));
+          break;
+        case 0x66: case 0x67:
+          Serial.println(F(" MCP4725A3 12-bit DAC"));
           break;
         case 0x68:
-          Serial.println(F(" DS3231 or DS1307 Real Time Clock"));
-          Serial.println(F(" or MPU9250 gyroscope, accelerometer, magnetometer"));
+          Serial.println(F(" DS1307 or DS3231 Real Time Clock"));
+          Serial.println(F(" or PCF8523 RTC"));
+          Serial.println(F(" or MPU9250 9-DoF IMU"));
+          Serial.println(F(" or MPU-60X0 Accel+Gyro"));
           Serial.println(F(" or L3G4200D gyroscope"));
+          Serial.println(F(" or ITG3200 gyroscope"));
+          Serial.println(F(" or ICM-20649 Accel+Gyro"));
+          Serial.println(F(" or AMG8833 IR Thermal Camera"));
           break;
-        case 0x69: // same device also on 0x68
-          // also need to study pass-through mode of MPU9250
-          Serial.println(F(" MPU9250 gyroscope, accelerometer, magnetometer"));
+        case 0x69:
+          Serial.println(F(" MPU9250 9-DoF IMU"));
+          Serial.println(F(" or MPU-60X0 Accel+Gyro"));
           Serial.println(F(" or L3G4200D gyroscope"));
+          Serial.println(F(" or ITG3200 gyroscope"));
+          Serial.println(F(" or ICM-20649 Accel+Gyro"));
+          Serial.println(F(" or AMG8833 IR Thermal Camera"));
+          break;
+        case 0x6A: case 0x6B:
+          Serial.println(F(" ICM330DHC 6-axis IMU"));
+          Serial.println(F(" or L3GD20H gyroscope"));
+          Serial.println(F(" or LSM6DS33 6-axis IMU"));
+          Serial.println(F(" or LSM6DSOX 6-axis IMU"));
+          Serial.println(F(" or LSM9DS0 9-axis IMU"));
+          break;
+        case 0x70: case 0x71: case 0x72: case 0x73:
+          Serial.println(F(" HT16K33 LED Matrix Driver"));
+          Serial.println(F(" or PCT2075 Temperature Sensor"));
+          Serial.println(F(" or TCA9548 1-to-8 I2C Multiplexer"));
+          break;
+        case 0x74: case 0x75:
+          Serial.println(F(" HT16K33 LED Matrix Driver"));
+          Serial.println(F(" or PCT2075 Temperature Sensor"));
+          Serial.println(F(" or TCA9548 1-to-8 I2C Multiplexer"));
+          Serial.println(F(" or IS31FL3731 144-LED CharliePlex driver"));
           break;
         case 0x76: case 0x77:
           Serial.println(F(" BMP180, BMP280, BME280 or BME680 or MS5607,MS5611,MS5637"));
@@ -202,7 +414,14 @@ void loop() {
           else if (data1 == 0x60) Serial.println(F(" = BME280"));
           else if (data1 == 0x55) Serial.println(F(" = BMP180"));
           else if (data1 == 0x61) Serial.println(F(" = BME680"));
-          else Serial.println(F(" ID not in list"));
+          else
+          {
+            Serial.println(F(" MS5607, MS5611 or MS5637 barometric pressure sensor"));
+            Serial.println(F(" or HT16K33 LED Matrix Driver"));
+            Serial.println(F(" or IS31FL3731 144-LED CharliePlex driver"));
+            Serial.println(F(" or PCT2075 Temperature Sensor"));
+            Serial.println(F(" or TCA9548 1-to-8 I2C Multiplexer"));
+          }
           break;
         default:
           Serial.println(F("device not in list"));
