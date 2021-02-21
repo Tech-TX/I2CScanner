@@ -133,8 +133,12 @@ void loop() {
           Serial.println(F(" PCF8574, MCP23008, MCP23017, PCAL6408A or PCAL6416A I/O expander"));
           Serial.println(F(" or FXAS21002 gyro"));
           break;
-        case 0x22: case 0x23: case 0x24: case 0x25:
+        case 0x22: case 0x24: case 0x25:
           Serial.println(F(" PCF8574, MCP23008 or MCP23017 I/O expander"));
+          break;
+        case 0x23:
+          Serial.println(F(" PCF8574, MCP23008 or MCP23017 I/O expander"));
+          Serial.println(F(" or BH1750 Ambient Light sensor"));
           break;
         case 0x26:
           Serial.println(F(" PCF8574, MCP23008 or MCP23017 I/O expander"));
@@ -142,7 +146,7 @@ void loop() {
           break;
         case 0x27:
           Serial.println(F(" PCF8574, MCP23008 or MCP23017 I/O expander"));
-          Serial.println(F(" or LCD with I2C backpack"));
+          Serial.println(F(" or alphanumeric LCD with I2C backpack"));
           break;
         case 0x28:
           Serial.println(F(" BNO055 9-DOF IMU"));
@@ -153,7 +157,7 @@ void loop() {
           Serial.println(F(" or TSL2591 light sensor"));
           break;
         case 0x29:
-          Serial.println(F(" TSC3472 color sensor"));
+          Serial.println(F(" TCS34725 RGB color sensor"));
           Serial.println(F(" or BNO055 9-DOF Absolute Orientation sensor"));
           Serial.println(F(" or DS1841 I2C Digital Logarithmic Potentiometer"));
           Serial.println(F(" or DS3502 I2C Digital 10K Potentiometer"));
@@ -310,12 +314,15 @@ void loop() {
           else
           {
             Serial.println(F(" MPR121 12-point capacitive touch sensor"));
-            if (address == 0x5a) Serial.println(F(" or MLX9061x IR temperature sensor"));
+            if (address == 0x5a) {
+				Serial.println(F(" or MLX9061x IR temperature sensor"));
+				Serial.println(F(" or DRV2605 Driver for Haptic motor"));
+			}
           }
           break;
         case 0x5C:
-          Serial.println(F(" AM2315 temperature & humidity sensor"));
-          Serial.println(F(" or AM2320 Humidity/Temp sensor"));
+          Serial.println(F(" AM2315/AM2320 temperature & humidity sensor"));
+          Serial.println(F(" or BH1750 Ambient Light sensor"));
           Serial.println(F(" or LPS25 Pressure Sensor"));
           Serial.println(F(" or LPS33HW Ported Pressure Sensor"));
           Serial.println(F(" or LPS35HW Pressure Sensor"));
@@ -365,7 +372,7 @@ void loop() {
           Serial.println(F(" or L3G4200D gyroscope"));
           Serial.println(F(" or ITG3200 gyroscope"));
           Serial.println(F(" or ICM-20649 Accel+Gyro"));
-          Serial.println(F(" or AMG8833 IR Thermal Camera"));
+          Serial.println(F(" or AMG883x IR Thermal Camera"));
           break;
         case 0x69:
           Serial.println(F(" MPU9250 9-DoF IMU"));
@@ -373,7 +380,7 @@ void loop() {
           Serial.println(F(" or L3G4200D gyroscope"));
           Serial.println(F(" or ITG3200 gyroscope"));
           Serial.println(F(" or ICM-20649 Accel+Gyro"));
-          Serial.println(F(" or AMG8833 IR Thermal Camera"));
+          Serial.println(F(" or AMG883x IR Thermal Camera"));
           break;
         case 0x6A: case 0x6B:
           Serial.println(F(" ICM330DHC 6-axis IMU"));
@@ -412,7 +419,7 @@ void loop() {
           Serial.print(data1, HEX);
           if (data1 == 0x58) Serial.println(F(" = BMP280"));
           else if (data1 == 0x60) Serial.println(F(" = BME280"));
-          else if (data1 == 0x55) Serial.println(F(" = BMP180"));
+          else if (data1 == 0x55) Serial.println(F(" = BMP085 or BMP180"));
           else if (data1 == 0x61) Serial.println(F(" = BME680"));
           else
           {
